@@ -25,7 +25,7 @@ class DepartmentUserTypePermissionRepository extends BaseRepository implements D
      */
     public function all(): Collection
     {
-        return $this->model->all();
+        return $this->model->with(['department:id,name', 'userType:id,name', 'permission:id,name,code,module_id', 'permission.module:id,name'])->get();
     }
 
     public function getDefaultPermissions(User $user): Collection

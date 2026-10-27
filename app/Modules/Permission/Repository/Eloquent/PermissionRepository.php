@@ -24,6 +24,6 @@ class PermissionRepository extends BaseRepository implements PermissionRepositor
      */
     public function all(): Collection
     {
-        return $this->model->all();
+        return $this->model->with(['module:id,name'])->get();
     }
 }

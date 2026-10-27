@@ -20,7 +20,7 @@ class Region extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class, 'island_id');
+        return $this->hasMany(User::class, 'region_id');
     }
 
     public function territory()

@@ -17,17 +17,17 @@ class BranchService
 
     public function getById(string $id)
     {
-        return $this->modelRepository->getById($id);
+        return $this->modelRepository->getById($id, ['region:id,name,territory_id', 'region.territory:id,name,island_id', 'region.territory.island:id,name']);
     }
 
     public function create(array $data)
     {
-        return $this->modelRepository->create($data);
+        return $this->modelRepository->create($data)->load(['region:id,name,territory_id', 'region.territory:id,name,island_id', 'region.territory.island:id,name']);
     }
 
     public function update(string $id, array $data)
     {
-        return $this->modelRepository->update($id, $data);
+        return $this->modelRepository->update($id, $data)->load(['region:id,name,territory_id', 'region.territory:id,name,island_id', 'region.territory.island:id,name']);
     }
 
     public function delete(string $id)

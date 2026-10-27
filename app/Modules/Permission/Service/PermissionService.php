@@ -202,4 +202,24 @@ class PermissionService
 
         return $this->getEffectivePermissions($user);
     }
+
+    public function getById(string $id)
+    {
+        return $this->modelRepository->getById($id, ['module:id,name']) ?? abort(404, 'Record not found.');
+    }
+
+    public function create(array $data)
+    {
+        return $this->modelRepository->create($data)->load(['module:id,name']);
+    }
+
+    public function update(string $id, array $data)
+    {
+        return $this->modelRepository->update($id, $data)->load(['module:id,name']);
+    }
+
+    public function delete(string $id)
+    {
+        return $this->modelRepository->delete($id);
+    }
 }

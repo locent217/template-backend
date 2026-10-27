@@ -2,59 +2,35 @@
 
 namespace App\Http\Requests\User;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         $id = $this->route('id');
 
         return [
-            'last_name' => ['required', 'string', 'max:45'],
             'first_name' => ['required', 'string', 'max:45'],
-            'middle_name' => ['required', 'string', 'max:45'],
-            'email' => ['required','string','unique:users'],
-
-            'username' => [
-                'required',
-                'string',
-                'max:100',
-                Rule::unique('users', 'username')->ignore($id)
-            ],
-
-            'password' => [
-                'required',
-                'string',
-                'confirmed',
-            ],
-
-            'department_id' => [
-                'nullable',
-                'uuid',
-                Rule::exists('departments', 'id'),
-            ],
-
-            'user_type_id' => [
-                'required',
-                'uuid',
-                Rule::exists('user_types', 'id'),
-            ],
+            'middle_name' => ['nullable', 'string', 'max:45'],
+            'last_name' => ['required', 'string', 'max:45'],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($id)],
+            'username' => ['required', 'string', 'max:255', Rule::unique('users', 'username')->ignore($id)],
+            'password' => ['sometimes', 'nullable', 'string', 'min:12', 'confirmed'],
+            'department_id' => ['nullable', 'uuid', Rule::exists('departments', 'id')],
+            'user_type_id' => ['required', 'uuid', Rule::exists('user_types', 'id')],
+            'branch_id' => ['nullable', 'uuid', Rule::exists('branches', 'id')],
+            'region_id' => ['nullable', 'uuid', Rule::exists('regions', 'id')],
+            'territory_id' => ['nullable', 'uuid', Rule::exists('territories', 'id')],
+            'island_id' => ['nullable', 'uuid', Rule::exists('islands', 'id')],
+            'active' => ['sometimes', 'boolean'],
+            'first_use' => ['sometimes', 'boolean'],
         ];
     }
 }

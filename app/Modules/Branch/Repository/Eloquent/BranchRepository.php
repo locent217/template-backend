@@ -24,6 +24,6 @@ class BranchRepository extends BaseRepository implements BranchRepositoryInterfa
      */
     public function all(): Collection
     {
-        return $this->model->all();
+        return $this->model->with(['region:id,name,territory_id', 'region.territory:id,name,island_id', 'region.territory.island:id,name'])->get();
     }
 }
