@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Modules\{{ model }}\Repository\Eloquent;
+
+use App\Models\{{ model }};
+use App\Modules\BaseRepository;
+use App\Modules\{{ model }}\Repository\{{ model }}RepositoryInterface;
+use Illuminate\Support\Collection;
+
+class {{ model }}Repository extends BaseRepository implements {{ model }}RepositoryInterface
+{
+    /**
+     * {{ model }}Repository constructor.
+     *
+     * @param {{ model }} $model
+     */
+    public function __construct({{ model }} $model)
+    {
+        parent::__construct($model);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function all(): Collection
+    {
+        return $this->model->all();
+    }
+}

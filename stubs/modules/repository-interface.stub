@@ -1,0 +1,10 @@
+<?php
+
+namespace App\Modules\{{ model }}\Repository;
+
+use Illuminate\Support\Collection;
+
+interface {{ model }}RepositoryInterface
+{
+    public function all(): Collection;
+}

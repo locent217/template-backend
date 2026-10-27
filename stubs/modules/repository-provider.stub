@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Providers\RepositoryServiceProviders;
+
+use Illuminate\Support\ServiceProvider;
+use App\Modules\{{ model }}\Repository\{{ model }}RepositoryInterface;
+use App\Modules\{{ model }}\Repository\Eloquent\{{ model }}Repository;
+
+class {{ model }}RepositoryServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        $this->app->bind(
+            {{ model }}RepositoryInterface::class,
+            {{ model }}Repository::class
+        );
+    }
+}

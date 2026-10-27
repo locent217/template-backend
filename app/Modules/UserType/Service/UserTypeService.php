@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Modules\UserType\Service;
+
+use App\Modules\UserType\Repository\UserTypeRepositoryInterface;
+
+class UserTypeService
+{
+    public function __construct(
+        protected UserTypeRepositoryInterface $modelRepository
+    ) {}
+
+    public function all(): array
+    {
+        return $this->modelRepository->all()->toArray();
+    }
+
+    public function getById(string $id)
+    {
+        return $this->modelRepository->getById($id);
+    }
+
+    public function create(array $data)
+    {
+        return $this->modelRepository->create($data);
+    }
+
+    public function update(string $id, array $data)
+    {
+        return $this->modelRepository->update($id, $data);
+    }
+
+    public function delete(string $id)
+    {
+        return $this->modelRepository->delete($id);
+    }
+}

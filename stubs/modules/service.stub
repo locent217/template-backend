@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Modules\{{ model }}\Service;
+
+use App\Modules\{{ model }}\Repository\{{ model }}RepositoryInterface;
+
+class {{ model }}Service
+{
+    public function __construct(
+        protected {{ model }}RepositoryInterface $modelRepository
+    ) {}
+
+    public function all(): array
+    {
+        return $this->modelRepository->all()->toArray();
+    }
+}
