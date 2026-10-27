@@ -20,7 +20,7 @@ class Territory extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class, 'island_id');
+        return $this->hasMany(User::class, 'territory_id');
     }
 
     public function island()

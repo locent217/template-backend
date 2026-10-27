@@ -24,6 +24,6 @@ class RegionRepository extends BaseRepository implements RegionRepositoryInterfa
      */
     public function all(): Collection
     {
-        return $this->model->all();
+        return $this->model->with(['territory:id,name,island_id', 'territory.island:id,name'])->get();
     }
 }

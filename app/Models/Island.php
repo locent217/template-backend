@@ -25,6 +25,6 @@ class Island extends Model
 
     public function territories()
     {
-        return $this->hasMany(Territory::class, 'territory_id');
+        return $this->hasMany(Territory::class, 'island_id');
     }
 }

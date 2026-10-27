@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['username', 'first_name', 'middle_name', 'last_name', 'active', 'first_user', 'email', 'password'])]
+#[Fillable(['username', 'first_name', 'middle_name', 'last_name', 'active', 'first_user', 'email', 'password', 'department_id', 'user_type_id', 'branch_id', 'region_id', 'territory_id', 'island_id'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -36,6 +36,21 @@ class User extends Authenticatable
     public function userType()
     {
         return $this->belongsTo(UserType::class, 'user_type_id');
+    }
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class, 'region_id');
+    }
+
+    public function territory()
+    {
+        return $this->belongsTo(Territory::class, 'territory_id');
+    }
+
+    public function island()
+    {
+        return $this->belongsTo(Island::class, 'island_id');
     }
 
     public function branch()

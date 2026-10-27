@@ -24,6 +24,6 @@ class TerritoryRepository extends BaseRepository implements TerritoryRepositoryI
      */
     public function all(): Collection
     {
-        return $this->model->all();
+        return $this->model->with(['island:id,name'])->get();
     }
 }
