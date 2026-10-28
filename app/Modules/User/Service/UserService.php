@@ -23,12 +23,29 @@ class UserService
 
     public function create(array $data)
     {
-        return $this->repository->create($data)->load(['department:id,name', 'userType:id,name', 'island:id,name', 'territory:id,name,island_id', 'territory.island:id,name', 'region:id,name,territory_id', 'region.territory:id,name,island_id', 'region.territory.island:id,name', 'branch:id,name,region_id', 'branch.region:id,name,territory_id', 'branch.region.territory:id,name,island_id', 'branch.region.territory.island:id,name']);
+        $record = $this->repository->create($data)->load(['department:id,name', 'userType:id,name', 'island:id,name', 'territory:id,name,island_id', 'territory.island:id,name', 'region:id,name,territory_id', 'region.territory:id,name,island_id', 'region.territory.island:id,name', 'branch:id,name,region_id', 'branch.region:id,name,territory_id', 'branch.region.territory:id,name,island_id', 'branch.region.territory.island:id,name']);
+        app(\App\Support\Audit\AuditRecorder::class)->record('users.create', $record, [], [], [
+            'service_class' => static::class, 'service_method' => __FUNCTION__,
+            'service_file' => 'app/Modules/User/Service/UserService.php',
+        ]);
+        // The initial password is provided by the creating administrator.
+        // Dispatch only after a successful transaction commit, never on rollback.
+        $temporaryPassword = $data['password'];
+        \Illuminate\Support\Facades\DB::afterCommit(function () use ($record, $temporaryPassword) {
+            app(\App\Modules\Notification\Service\NotificationService::class)
+                ->notifyNewUser($record, $temporaryPassword);
+        });
+        return $record;
     }
 
     public function update(string $id, array $data)
     {
-        return $this->repository->update($id, $data)->load(['department:id,name', 'userType:id,name', 'island:id,name', 'territory:id,name,island_id', 'territory.island:id,name', 'region:id,name,territory_id', 'region.territory:id,name,island_id', 'region.territory.island:id,name', 'branch:id,name,region_id', 'branch.region:id,name,territory_id', 'branch.region.territory:id,name,island_id', 'branch.region.territory.island:id,name']);
+        $record = $this->repository->update($id, $data)->load(['department:id,name', 'userType:id,name', 'island:id,name', 'territory:id,name,island_id', 'territory.island:id,name', 'region:id,name,territory_id', 'region.territory:id,name,island_id', 'region.territory.island:id,name', 'branch:id,name,region_id', 'branch.region:id,name,territory_id', 'branch.region.territory:id,name,island_id', 'branch.region.territory.island:id,name']);
+        app(\App\Support\Audit\AuditRecorder::class)->record('users.update', $record, [], [], [
+            'service_class' => static::class, 'service_method' => __FUNCTION__,
+            'service_file' => 'app/Modules/User/Service/UserService.php',
+        ]);
+        return $record;
     }
 
     public function delete(string $id)

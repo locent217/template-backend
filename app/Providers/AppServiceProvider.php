@@ -16,6 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(\App\Modules\Notification\Repository\NotificationRepositoryInterface::class, \App\Modules\Notification\Repository\Eloquent\NotificationRepository::class);
         //
     }
 
@@ -24,6 +25,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        /*
+         * Register audit observers automatically for eligible Eloquent models.
+         * Disabling auditing skips only this block, not other boot logic.
+         */
+        if (config('audit.enabled', true)) {
+            foreach (\App\Support\Audit\AuditableModelDiscovery::discover() as $model) {
+                $model::observe(\App\Observers\AuditedModelObserver::class);
+            }
+        }
     }
 }

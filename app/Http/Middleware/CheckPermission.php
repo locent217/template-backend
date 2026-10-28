@@ -27,6 +27,7 @@ class CheckPermission
                 $permission
             )
         ) {
+            app(\App\Support\Audit\AuditRecorder::class)->record('auth.access_denied', null, [], [], ['permission' => $permission]);
             abort(403, 'You do not have permission to perform this action.');
         }
 
