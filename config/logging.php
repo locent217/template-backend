@@ -51,6 +51,13 @@ return [
     */
 
     'channels' => [
+        'audit_diagnostics' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/audit-diagnostics.log'),
+            'level' => env('AUDIT_LOG_LEVEL', 'info'),
+            'days' => (int) env('AUDIT_DIAGNOSTIC_DAYS', 14),
+        ],
+
 
         'stack' => [
             'driver' => 'stack',
