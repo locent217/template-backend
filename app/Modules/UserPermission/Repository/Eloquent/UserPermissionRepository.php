@@ -77,7 +77,7 @@ class UserPermissionRepository extends BaseRepository implements UserPermissionR
         Permission $permission,
         bool $allowed
     ): void {
-        $this->model->updateOrInsert(
+        $this->model->updateOrCreate(
             [
                 'user_id' => $user->id,
                 'permission_id' => $permission->id,

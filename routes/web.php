@@ -20,7 +20,11 @@ use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\DepartmentUserTypePermissionController;
 
-Route::prefix('api')->middleware(\App\Http\Middleware\AuditHttpRequest::class)->group(function () {
+Route::prefix('api')->middleware([\App\Http\Middleware\AuditHttpRequest::class, \App\Http\Middleware\CheckSystemMaintenance::class])->group(function () {
+
+    // Public status; protected toggle remains accessible while maintenance is enabled.
+    Route::get('/system/maintenance/status', [\App\Http\Controllers\SystemMaintenanceController::class, 'status'])->middleware('throttle:60,1');
+    Route::put('/system/maintenance', [\App\Http\Controllers\SystemMaintenanceController::class, 'update'])->middleware(['auth:sanctum', 'super_admin', 'throttle:10,1']);
 
     // Public account recovery; use generic responses to avoid exposing registered addresses.
     Route::post('/account/forgot-username', [\App\Http\Controllers\AccountRecoveryController::class, 'forgotUsername'])->middleware('throttle:3,1');
