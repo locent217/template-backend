@@ -5,25 +5,38 @@ namespace App\Modules\{{ model }}\Repository\Eloquent;
 use App\Models\{{ model }};
 use App\Modules\BaseRepository;
 use App\Modules\{{ model }}\Repository\{{ model }}RepositoryInterface;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class {{ model }}Repository extends BaseRepository implements {{ model }}RepositoryInterface
 {
-    /**
-     * {{ model }}Repository constructor.
-     *
-     * @param {{ model }} $model
-     */
     public function __construct({{ model }} $model)
     {
         parent::__construct($model);
     }
 
-    /**
-     * @return Collection
-     */
     public function all(): Collection
     {
-        return $this->model->all();
+        return $this->model->newQuery()->get();
+    }
+
+    public function getById(string|int $id, array $relations = []): ?Model
+    {
+        return parent::getById($id, $relations);
+    }
+
+    public function create(array $attributes): Model
+    {
+        return parent::create($attributes);
+    }
+
+    public function update(string $id, array $attributes): Model
+    {
+        return parent::update($id, $attributes);
+    }
+
+    public function delete(string|int $id): bool
+    {
+        return (bool) parent::delete($id);
     }
 }

@@ -22,6 +22,16 @@ class ModuleRepository extends BaseRepository implements ModuleRepositoryInterfa
     /**
      * @return Collection
      */
+    public function getCategories(): Collection
+    {
+        return $this->model->newQuery()
+            ->whereNotNull('category')
+            ->where('category', '!=', '')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category');
+    }
+
     public function all(): Collection
     {
         return $this->model->all();

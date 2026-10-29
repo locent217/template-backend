@@ -2,6 +2,8 @@
 
 namespace App\Modules\Module\Service;
 
+use Illuminate\Support\Collection;
+
 use App\Modules\Module\Repository\ModuleRepositoryInterface;
 
 class ModuleService
@@ -9,6 +11,11 @@ class ModuleService
     public function __construct(
         protected ModuleRepositoryInterface $modelRepository
     ) {}
+
+    public function getCategories(): Collection
+    {
+        return $this->modelRepository->getCategories();
+    }
 
     public function all(): array
     {
