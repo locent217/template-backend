@@ -22,7 +22,6 @@ class ModulePermissionSeeder extends Seeder
             'modules' => ['name' => 'Module Management', 'category' => 'administration', 'actions' => ['view', 'create', 'update', 'delete']],
             'permissions' => ['name' => 'Permission Management', 'category' => 'administration', 'actions' => ['view', 'create', 'update', 'delete']],
             'department_user_type_permissions' => ['name' => 'Department User Type Permission Management', 'category' => 'administration', 'actions' => ['view', 'create', 'update', 'delete']],
-            'remittances' => ['name' => 'Remittances', 'category' => 'transaction', 'actions' => ['view', 'create', 'update', 'delete']],
         ];
 
         foreach ($modules as $code => $details) {
