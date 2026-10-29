@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Http\Requests\{{ model }};
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class Add{{ model }}Request extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return true; // Authorization belongs to route permission middleware.
+    }
+
+    public function rules(): array
+    {
+        // TODO: Define validation rules for creating {{ model }}.
+        return [];
+    }
+}

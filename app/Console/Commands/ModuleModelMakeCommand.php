@@ -63,6 +63,18 @@ class ModuleModelMakeCommand extends ModelMakeCommand
             app_path(
                 "Providers/RepositoryServiceProviders/{$model}RepositoryServiceProvider.php"
             ) => 'repository-provider.stub',
+
+            app_path("Http/Controllers/{$model}Controller.php")
+            => 'controller.stub',
+
+            app_path("Http/Requests/{$model}/Add{$model}Request.php")
+            => 'add-request.stub',
+
+            app_path("Http/Requests/{$model}/Update{$model}Request.php")
+            => 'update-request.stub',
+
+            base_path("routes/modules/{$model}Routes.php")
+            => 'route.stub',
         ];
 
         foreach ($files as $path => $stub) {
@@ -78,8 +90,8 @@ class ModuleModelMakeCommand extends ModelMakeCommand
             );
 
             $content = str_replace(
-                '{{ model }}',
-                $model,
+                ['{{ model }}', '{{ route }}', '{{ permission }}'],
+                [$model, Str::kebab(Str::pluralStudly($model)), Str::snake(Str::pluralStudly($model))],
                 $content
             );
 

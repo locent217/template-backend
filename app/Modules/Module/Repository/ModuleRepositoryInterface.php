@@ -6,5 +6,6 @@ use Illuminate\Support\Collection;
 
 interface ModuleRepositoryInterface
 {
+    public function getCategories(): Collection;
     public function all(): Collection;
 }

@@ -1,0 +1,20 @@
+<?php
+
+use App\Http\Controllers\{{ model }}Controller;
+use Illuminate\Support\Facades\Route;
+
+// Automatically loaded inside the authenticated /api group in routes/web.php.
+// Routes stay disabled until permissions, validation and model fillable fields are configured.
+return new class {
+    public function register(): void
+    {
+        Route::prefix('{{ route }}')->group(function (): void {
+            // TODO: Add appropriate permission middleware to every route.
+            // Route::get('/', [{{ model }}Controller::class, 'all']);
+            // Route::get('/{id}', [{{ model }}Controller::class, 'getById']);
+            // Route::post('/add', [{{ model }}Controller::class, 'create']);
+            // Route::put('/update/{id}', [{{ model }}Controller::class, 'update']);
+            // Route::delete('/delete/{id}', [{{ model }}Controller::class, 'destroy']);
+        });
+    }
+};

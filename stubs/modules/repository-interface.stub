@@ -2,9 +2,18 @@
 
 namespace App\Modules\{{ model }}\Repository;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 interface {{ model }}RepositoryInterface
 {
     public function all(): Collection;
+
+    public function getById(string|int $id, array $relations = []): ?Model;
+
+    public function create(array $attributes): Model;
+
+    public function update(string $id, array $attributes): Model;
+
+    public function delete(string|int $id): bool;
 }

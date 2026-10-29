@@ -13,6 +13,11 @@ class ModuleController extends Controller
         protected ModuleService $service
     ) {}
 
+    public function categories(): JsonResponse
+    {
+        return response()->json(['data' => $this->service->getCategories()]);
+    }
+
     public function index(): JsonResponse
     {
         return response()->json(['data' => $this->service->all()]);

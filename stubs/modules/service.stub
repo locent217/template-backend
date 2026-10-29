@@ -3,15 +3,38 @@
 namespace App\Modules\{{ model }}\Service;
 
 use App\Modules\{{ model }}\Repository\{{ model }}RepositoryInterface;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class {{ model }}Service
 {
-    public function __construct(
-        protected {{ model }}RepositoryInterface $modelRepository
-    ) {}
+    public function __construct(protected {{ model }}RepositoryInterface $modelRepository) {}
 
-    public function all(): array
+    public function all(): Collection
     {
-        return $this->modelRepository->all()->toArray();
+        return $this->modelRepository->all();
+    }
+
+    public function getById(string $id): ?Model
+    {
+        return $this->modelRepository->getById($id);
+    }
+
+    public function create(array $data): Model
+    {
+        // TODO: Add module-specific business rules before persisting.
+        return $this->modelRepository->create($data);
+    }
+
+    public function update(string $id, array $data): Model
+    {
+        // TODO: Add module-specific business rules before persisting.
+        return $this->modelRepository->update($id, $data);
+    }
+
+    public function delete(string $id): bool
+    {
+        // TODO: Add module-specific business rules before deleting.
+        return $this->modelRepository->delete($id);
     }
 }

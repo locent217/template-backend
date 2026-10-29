@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\{{ model }}\Add{{ model }}Request;
+use App\Http\Requests\{{ model }}\Update{{ model }}Request;
+use App\Modules\{{ model }}\Service\{{ model }}Service;
+use Illuminate\Http\JsonResponse;
+
+class {{ model }}Controller extends Controller
+{
+    public function __construct(protected {{ model }}Service $service) {}
+
+    public function all(): JsonResponse
+    {
+        return response()->json(['data' => $this->service->all()]);
+    }
+
+    public function getById(string $id): JsonResponse
+    {
+        $model = $this->service->getById($id);
+        abort_if($model === null, 404);
+
+        return response()->json(['data' => $model]);
+    }
+
+    public function create(Add{{ model }}Request $request): JsonResponse
+    {
+        return response()->json(['data' => $this->service->create($request->validated())], 201);
+    }
+
+    public function update(Update{{ model }}Request $request, string $id): JsonResponse
+    {
+        return response()->json(['data' => $this->service->update($id, $request->validated())]);
+    }
+
+    public function destroy(string $id): JsonResponse
+    {
+        $this->service->delete($id);
+
+        return response()->json(['message' => '{{ model }} deleted successfully.']);
+    }
+}
