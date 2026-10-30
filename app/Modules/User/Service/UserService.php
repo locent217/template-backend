@@ -4,6 +4,7 @@ namespace App\Modules\User\Service;
 
 use App\Modules\User\Repository\UserRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
+use App\Models\UserType;
 
 class UserService
 {
@@ -23,6 +24,7 @@ class UserService
 
     public function create(array $data)
     {
+        $data = $this->normalizeClientAssignments($data);
         $record = $this->repository->create($data)->load(['department:id,name', 'userType:id,name', 'island:id,name', 'territory:id,name,island_id', 'territory.island:id,name', 'region:id,name,territory_id', 'region.territory:id,name,island_id', 'region.territory.island:id,name', 'branch:id,name,region_id', 'branch.region:id,name,territory_id', 'branch.region.territory:id,name,island_id', 'branch.region.territory.island:id,name']);
         app(\App\Support\Audit\AuditRecorder::class)->record('users.create', $record, [], [], [
             'service_class' => static::class, 'service_method' => __FUNCTION__,
@@ -40,6 +42,7 @@ class UserService
 
     public function update(string $id, array $data)
     {
+        $data = $this->normalizeClientAssignments($data);
         $record = $this->repository->update($id, $data)->load(['department:id,name', 'userType:id,name', 'island:id,name', 'territory:id,name,island_id', 'territory.island:id,name', 'region:id,name,territory_id', 'region.territory:id,name,island_id', 'region.territory.island:id,name', 'branch:id,name,region_id', 'branch.region:id,name,territory_id', 'branch.region.territory:id,name,island_id', 'branch.region.territory.island:id,name']);
         app(\App\Support\Audit\AuditRecorder::class)->record('users.update', $record, [], [], [
             'service_class' => static::class, 'service_method' => __FUNCTION__,
@@ -51,6 +54,22 @@ class UserService
     public function delete(string $id)
     {
         return $this->repository->delete($id);
+    }
+
+    private function normalizeClientAssignments(array $data): array
+    {
+        $isClient = UserType::query()
+            ->whereKey($data['user_type_id'] ?? null)
+            ->where('code', 'CLIENT')
+            ->exists();
+
+        if ($isClient) {
+            foreach (['department_id', 'branch_id', 'region_id', 'territory_id', 'island_id'] as $field) {
+                $data[$field] = null;
+            }
+        }
+
+        return $data;
     }
 
 }

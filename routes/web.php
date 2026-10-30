@@ -34,7 +34,7 @@ Route::prefix('api')->middleware([\App\Http\Middleware\AuditHttpRequest::class, 
     Route::post('/login', [AuthController::class, 'login'])
         ->middleware('guest');
 
-    Route::middleware(['auth:sanctum', \App\Http\Middleware\EnsureFirstUseCompleted::class])->group(function () {
+    Route::middleware(['auth:sanctum', \App\Http\Middleware\EnsureEmployeePortalAccess::class, \App\Http\Middleware\EnsureFirstUseCompleted::class])->group(function () {
 
         // Restricted read-only audit log endpoints. OR: Super Admin user type or IT department.
         Route::prefix('audit-logs')->middleware(\App\Http\Middleware\AuthorizeAuditLogAccess::class)->group(function () {
@@ -60,5 +60,57 @@ Route::prefix('api')->middleware([\App\Http\Middleware\AuditHttpRequest::class, 
             (require $routeFile)->register();
         }
 
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Client Portal API Routes (reserved for future implementation)
+    |--------------------------------------------------------------------------
+    |
+    | Keep client-facing endpoints separate from employee module routes.
+    | No client endpoints are active yet.
+    |
+    | Before enabling a route, implement and apply client-only access
+    | middleware in addition to Sanctum authentication. Always check
+    | resource ownership inside client controllers/services.
+    |
+    */
+    Route::prefix('client')->middleware([
+        'auth:sanctum',
+        // \App\Http\Middleware\EnsureClientPortalAccess::class,
+    ])->group(function () {
+        // Route::get('/profile', [ClientProfileController::class, 'show']);
+        // Route::get('/plans', [ClientPlanController::class, 'index']);
+        // Route::get('/payments', [ClientPaymentController::class, 'index']);
+
+        Route::get('/me', [AuthController::class, 'me']);
+        Route::post('/account/credentials', [AuthController::class, 'changeFirstUseCredentials'])->middleware('throttle:5,1');
+        Route::post('/logout', [AuthController::class, 'logout']);
+
+        Route::middleware([
+            \App\Http\Middleware\EnsureFirstUseCompleted::class,
+        ])->group(function () {
+
+            Route::post('/account/change-password', [
+                \App\Http\Controllers\AccountRecoveryController::class,
+                'changePassword',
+            ])->middleware('throttle:5,1');
+
+            Route::prefix('notifications')->group(function () {
+                Route::get('/', [\App\Http\Controllers\NotificationController::class, 'index']);
+                Route::patch('/{id}/read', [\App\Http\Controllers\NotificationController::class, 'markRead'])->whereUuid('id');
+                Route::patch('/{id}/unread', [\App\Http\Controllers\NotificationController::class, 'markUnread'])->whereUuid('id');
+            });
+
+            /*
+            |--------------------------------------------------------------------------
+            | Future Client Portal Routes
+            |--------------------------------------------------------------------------
+            */
+
+            // Route::get('/profile', [ClientProfileController::class, 'show']);
+            // Route::get('/plans', [ClientPlanController::class, 'index']);
+            // Route::get('/payments', [ClientPaymentController::class, 'index']);
+        });
     });
 });
