@@ -30,6 +30,11 @@ class PermissionService
 
         $user->loadMissing('userType');
 
+        // Clients never inherit employee permissions, including individual overrides.
+        if ($user->userType?->code === 'CLIENT') {
+            return [];
+        }
+
         // Super Admin bypasses department defaults and overrides.
         if ($user->userType?->code === 'SUPER_ADMIN') {
             return DB::table('permissions')

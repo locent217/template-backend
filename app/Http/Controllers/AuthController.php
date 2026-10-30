@@ -78,6 +78,17 @@ class AuthController extends Controller
             ]);
         }
 
+        $user->loadMissing('userType');
+        if ($user->userType?->code === 'CLIENT') {
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            app(\App\Support\Audit\AuditRecorder::class)->record('auth.login_denied', null, [], [], ['reason' => 'client_portal_only']);
+            throw ValidationException::withMessages([
+                'username' => ['Client accounts cannot access the Employee Portal. The Client Portal is not yet available.'],
+            ]);
+        }
+
         app(\App\Support\Audit\AuditRecorder::class)->record('auth.login', $user);
         return response()->json([
             'message' => 'Login successful.',
